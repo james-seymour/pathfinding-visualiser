@@ -7,7 +7,6 @@ function setup_button_handlers() {
 
 }
 
-
 function App() {
    const [algorithmType, setAlgorithmType] = React.useState(0)
    function handleAlgorithmClick (value) {

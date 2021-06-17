@@ -9,6 +9,7 @@ import "./Visualiser.css"
 const Visualiser = (props) => {
     
     console.log(props.algorithmChoice)
+    
     const gridData = createGridData()
     return (
         // We want to render our <Node /> components here using the a Board Model
