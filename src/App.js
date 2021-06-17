@@ -1,6 +1,6 @@
 import React from "react"
-import Grid from "./grid/Grid.js"
-import Header from "./header/Header.js"
+import Grid from "./visualiser/Visualiser.js"
+import Header from "./user_interface/UserInterface.js"
 
 function App() {
   // In order to return more than one HTML element at once, wrap in an empty element:
