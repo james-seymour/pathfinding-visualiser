@@ -1,9 +1,7 @@
 import React from 'react'
 
-export default function header() {
+export default function UserInterface() {
     return (
-        <div>
-            
-        </div>
+        null
     )
 }
