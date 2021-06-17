@@ -10,8 +10,8 @@ function setup_button_handlers() {
 
 function App() {
    const [algorithmType, setAlgorithmType] = React.useState(0)
-   function handleAlgorithmClick (e) {
-    setAlgorithmType(1)
+   function handleAlgorithmClick (value) {
+    setAlgorithmType(value)
   }
 
   // In order to return more than one HTML element at once, wrap in an empty element:
