@@ -1,13 +1,22 @@
-import React from 'react'
+import React, { useState } from 'react'
 import * as Constants from "../constants.js"
+import UserInterface from '../user_interface/UserInterface.js'
 import Node from "./Node.js"
 
 // Any {} tells the compiler this is JS specific code 
 
-const Visualiser = () => {
+const Visualiser = (props) => {
+    
+    const [clicked, setClicked] = React.useState(false)
+    function handleClick(e) {
+        setClicked(!clicked)
+        console.log(clicked)
+    }
+
     return (
         <div className="grid">
             {createInitialGrid()}
+            <UserInterface clicked={handleClick}/>
         </div>
         
     )
