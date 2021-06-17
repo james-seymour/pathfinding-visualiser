@@ -1,25 +1,19 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react"
+import Grid from "./grid/Grid.js"
+import Header from "./header/Header.js"
 
 function App() {
+  // In order to return more than one HTML element at once, wrap in an empty element:
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React now!
-        </a>
-      </header>
-    </div>
-  );
+    <>
+      <Header />
+      <Grid />
+      <input type="text"></input>
+      <button>Add Todo</button>
+      <button>Clear Todo</button>
+      <div>0 left todo</div>
+    </>
+  )
 }
 
 export default App;
