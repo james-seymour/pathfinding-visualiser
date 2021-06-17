@@ -8,19 +8,17 @@ function setup_button_handlers() {
 }
 
 
-
-
 function App() {
-  // const [djikstraClicked, setDjikstraClicked] = React.useState(false)
-  // function handleDjikstraClicked (e) {
-  //   setDjikstraClicked(!djikstraClicked)
-  // }
-
+   const [algorithmType, setAlgorithmType] = React.useState(0)
+   function handleAlgorithmClick (e) {
+    setAlgorithmType(1)
+  }
 
   // In order to return more than one HTML element at once, wrap in an empty element:
   return (
       <div className="main">      
-        <Visualiser />
+        <UserInterface algorithmUpdater={handleAlgorithmClick}/>
+        <Visualiser algorithmChoice={algorithmType}/>
       </div>
   )
 }

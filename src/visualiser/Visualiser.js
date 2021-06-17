@@ -7,16 +7,10 @@ import Node from "./Node.js"
 
 const Visualiser = (props) => {
     
-    const [clicked, setClicked] = React.useState(false)
-    function handleClick(e) {
-        setClicked(!clicked)
-        console.log(clicked)
-    }
-
+    console.log(props.algorithmChoice)
     return (
         <div className="grid">
             {createInitialGrid()}
-            <UserInterface clicked={handleClick}/>
         </div>
         
     )
