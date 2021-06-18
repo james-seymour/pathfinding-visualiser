@@ -28,10 +28,10 @@ const calculateDijkstra = (updateGridData) => {
         // const endNode = newGridData[Constants.EXAMPLE_END_NODE[0]][Constants.EXAMPLE_END_NODE[1]]
         // console.log(startNode, endNode)
         
-        newGridData[2][1].isWall = true 
+        newGridData[2][1].isWall = !newGridData[2][1].isWall 
         console.log(newGridData[2][1])
 
-        return newGridData
+        return gridData
     })
 }
 
