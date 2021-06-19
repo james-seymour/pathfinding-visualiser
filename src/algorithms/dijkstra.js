@@ -35,6 +35,8 @@ const calculateDijkstra = (updateGridData) => {
     })
 }
 
+
+
 // We receive the grid data and need to animate it here
 const animateDijkstra = (gridData) => {
     // Iterate through the given grid data and animate
