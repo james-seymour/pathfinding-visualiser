@@ -1,6 +1,6 @@
 // Commonly used constants can be stored here
-export const NUM_ROWS = 15
-export const NUM_COLS = 20
+export const NUM_ROWS = 30
+export const NUM_COLS = 50
 
 export const EXAMPLE_START_NODE = [3, 3]
 export const EXAMPLE_END_NODE = [5, 5]
