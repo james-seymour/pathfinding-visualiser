@@ -1,6 +1,7 @@
-import React, { createContext, useState, useEffect } from 'react'
+import React, { PureComponent, createContext, useState, useEffect } from 'react'
 import * as Constants from "../constants.js"
 import { calculateDijkstra, animateDijkstra } from '../algorithms/dijkstra.js'
+import { v4 as uuidv4 } from "uuid"
 import Node from "./Node.js"
 import "./Visualiser.css" 
 
@@ -8,47 +9,70 @@ import "./Visualiser.css"
 
 // Any {} tells the compiler this is JS specific code 
 
-const Visualiser = (props) => {
-    
-	const [gridData, updateGridData] = React.useState(createGridData())
-	// const fakeGridData = React.useRef(createGridData())
-	// A toggle variables for mouse pressed, which is used for clicking and dragging walls
-	const [mousePressed, updateMousePressed] = React.useState(false)
-	const isRunning = React.useRef(false)
+export default class Visualiser extends PureComponent {
+	constructor() {
+		super();
+		this.state = {
+			keyList: [],
+			gridData: [],
+			mouseIsPressed: false,
+			isRunning: false,
+		}
+	}
+
+	componentDidMount() {
+		const keyList = createKeyList()
+		const gridData = createGridData()
+		this.setState({ keyList, gridData })
+	}
+
+	handleMouseDown(row, col) {
+		if (this.state.isRunning) return;
+		const newGrid = placeWallInGrid(this.state.gridData, row, col)
+		this.setState({grid: newGrid, mouseIsPressed: true})
+	}
+	
+	handleMouseEnter(row, col) {
+		if (this.state.isRunning) return;
+		// console.log("MouseEnter at", row, col)
+		if (this.state.mouseIsPressed) {
+			const newGrid = placeWallInGrid(this.state.gridData, row, col)
+			this.setState({ grid: newGrid })
+		}
+	}
+	
+	handleMouseUp() {
+		if (this.state.isRunning) return;
+		this.setState({ mouseIsPressed: false })
+		// console.log("MouseUp")
+	}
 
 	// Use effects are fucking sick if the the element in brackets updates its state 
 	// ([props.algorithmChoice]), then the function will be called.
 	// More of these can be setup for any UI elements that arent just running an algorithm
 
-	const toggleIsRunning = () => {
-		isRunning.current = !isRunning.current
+	toggleIsRunning() {
+		this.setState({isRunning: !this.state.isRunning})
 	}
 
-	const clearWalls = () => {
-		if (isRunning.current) return;
-	}
-	const clearAlgorithmSteps = () => {
-		if (isRunning.current) return;
+	clearWalls() {
+		if (this.state.isRunning) return;
 	}
 
-	const clearEntireCanvas = () => {
-		if (isRunning.current) return;
-		updateGridData(createGridData())
+	clearAlgorithmSteps() {
+		if (this.state.isRunning) return;
 	}
 
-	const placeWallInGrid = (row, col) => {
-		const newGrid = [...gridData]
-		const wallNode = newGrid[row][col]
-		const newNode = {
-			...wallNode, isWall: !wallNode.isWall,
-		}
-		newGrid[row][col] = newNode
-		return newGrid
+	clearEntireCanvas() {
+		if (this.state.isRunning) return;
+		this.setState({gridData: createGridData()})
 	}
 
-	const parseAlgorithmChoice = (algorithm) => {
+	parseAlgorithmChoice(algorithm) {
+		// Set the state to running!
+		
 		// Grab some variables that each algorithm needs
-		const gridDataCopy = {gridData}
+		const gridDataCopy = [...this.state.gridData]
 		const startNode = getStartNode(gridDataCopy)
 		const endNode = getEndNode(gridDataCopy)
 
@@ -59,9 +83,15 @@ const Visualiser = (props) => {
 			// because they can actually receive this state by calling the update function
 			// See dijkstra.js
 			case Constants.DIJKSTRA:
-				//const algorithmCalculation = calculateDijkstra(gridDataCopy, startNode, endNode)
-				// console.log(algorithmCalculation)
-				// Animate here
+				const algorithmCalculation = calculateDijkstra(gridDataCopy, startNode, endNode)
+
+				for (let i = 1; i < algorithmCalculation.length - 1; i++) {
+					setTimeout(() => {
+						const node = algorithmCalculation[i]
+						document.getElementById(`node-${node.row}-${node.col}`).className = 'node node-visited'
+					}, 10 * i)
+				}
+
 				break;
 			
 			case Constants.ASTAR:
@@ -69,31 +99,11 @@ const Visualiser = (props) => {
 		}
 	}	
 
-	const handleMouseDown = (row, col) => {
-		if (isRunning.current) return;
-		// Place wall in grid
-		updateGridData(placeWallInGrid(row, col))
-		// console.log("MouseDown at", row, col)
 
-		// "Hold" mouse down by setting mousePressed state to true
-		updateMousePressed(true)
-	}
-	
-	const handleMouseEnter = (row, col) => {
-		if (isRunning.current) return;
-		// console.log("MouseEnter at", row, col)
-		if (mousePressed) {
-			updateGridData(placeWallInGrid(row, col))
-		}
-	}
-	
-	const handleMouseUp = () => {
-		if (isRunning.current) return;
-		updateMousePressed(false)
-		// console.log("MouseUp")
-	}
 
-	const renderGrid = () => {
+	renderGrid() {
+		const { keyList, gridData, mouseIsPressed, isRunning } = this.state
+
 		return (
 			// We want to render our <Node /> components here using the a Board Model
 			<div className="grid">
@@ -103,15 +113,11 @@ const Visualiser = (props) => {
 							{rowData.map((node, nodeIndex) => {
 								return (
 									<Node 
-									key={nodeIndex} 
-									row={rowIndex} 
-									col={nodeIndex} 
-									isStart={node.isStart} 
-									isFinish={node.isFinish} 
-									isWall={node.isWall}
-									onMouseDown={() => {handleMouseDown(node.row, node.col)}}
-									onMouseEnter={() => {handleMouseEnter(node.row, node.col)}}
-									onMouseUp={() => {handleMouseUp()}}
+									key={keyList[rowIndex][nodeIndex]} 
+									nodeData={node}
+									onMouseDown={(row, col) => {this.handleMouseDown(row, col)}}
+									onMouseEnter={(row, col) => {this.handleMouseEnter(row, col)}}
+									onMouseUp={() => {this.handleMouseUp()}}
 									/>
 								)
 							})}
@@ -122,35 +128,35 @@ const Visualiser = (props) => {
 		)
 	}
 
-	const renderUserInterface = () => {
+	renderUserInterface() {
 		return (
 			<div className="userinterface">   
 				<button id="Dijkstra" className="algorithmButton"
-				onClick={() => parseAlgorithmChoice(Constants.DIJKSTRA)}>
+				onClick={() => this.parseAlgorithmChoice(Constants.DIJKSTRA)}>
 					Run Djikstra's Algorithm
 				</button>
 				<button id="AStar" className="algorithmButton"
-				onClick={() => parseAlgorithmChoice(Constants.ASTAR)}>
+				onClick={() => this.parseAlgorithmChoice(Constants.ASTAR)}>
 					Run A* Algorithm
 				</button>
 				<button id="Greedy" className="algorithmButton"
-				onClick={() => parseAlgorithmChoice(Constants.GREEDY)}>
+				onClick={() => this.parseAlgorithmChoice(Constants.GREEDY)}>
 					Run Greedy Best-First Search
 				</button>
 				<button id="Swarm" className="algorithmButton"
-				onClick={() => parseAlgorithmChoice(Constants.SWARM)}>
+				onClick={() => this.parseAlgorithmChoice(Constants.SWARM)}>
 					Run Swarm Algorithm
 				</button>
 				<button id="clear-walls" className="clearButton"
-				onClick={() => clearWalls()}>
+				onClick={() => this.clearWalls()}>
 					Clear Walls!
 				</button>
 				<button id="clear-algorithm-steps" className="clearButton"
-				onClick={() => clearAlgorithmSteps()}>
+				onClick={() => this.clearAlgorithmSteps()}>
 					Clear Previous Algorithm!
 				</button>
 				<button id="clear-board" className="clearButton"
-				onClick={() => clearEntireCanvas()}>
+				onClick={() => this.clearEntireCanvas()}>
 					Clear the Entire Board!
 				</button>
 			</div>
@@ -158,23 +164,34 @@ const Visualiser = (props) => {
 	}
 
 	// Main Render State
-	return (
-		<>
-			{renderUserInterface()}
-			{renderGrid()}
-		</>
-	)
+	render() {
+		return (		
+			<>
+			{this.renderUserInterface()}
+			{this.renderGrid()}
+			</>
+		)
+	}
+}
 
+const placeWallInGrid = (grid, row, col) => {
+	const newGrid = grid.slice()
+	const wallNode = newGrid[row][col]
+	const newNode = {
+		...wallNode, isWall: !wallNode.isWall,
+	}
+	newGrid[row][col] = newNode
+	return newGrid
 }
 
 const getStartNode = (grid) => {
-	//const startNode = grid[Constants.EXAMPLE_START_NODE[0]][Constants.EXAMPLE_START_NODE[1]]
-	//return startNode
+	const startNode = grid[Constants.EXAMPLE_START_NODE[0]][Constants.EXAMPLE_START_NODE[1]]
+	return startNode
 }
 
 const getEndNode = (grid) => {
-	//const endNode = grid[Constants.EXAMPLE_END_NODE[0]][Constants.EXAMPLE_END_NODE[1]]
-	//return endNode
+	const endNode = grid[Constants.EXAMPLE_END_NODE[0]][Constants.EXAMPLE_END_NODE[1]]
+	return endNode
 }
 
 const createNode = (row, col) => {
@@ -183,8 +200,10 @@ const createNode = (row, col) => {
 		col,
 		isStart: row === Constants.EXAMPLE_START_NODE[0] && col === Constants.EXAMPLE_START_NODE[1],
 		isFinish: row === Constants.EXAMPLE_END_NODE[0] && col === Constants.EXAMPLE_END_NODE[1],
-		distance: Infinity,
 		isWall: false,
+		distance: Infinity,
+		isVisited: false,
+		previousNode: null,
 	})
 }
 
@@ -200,4 +219,17 @@ const createGridData = () => {
 	return grid
 }
 
-export default Visualiser
+const createKeyList = () => {
+	const keyList = []
+	for (let row = 0; row < Constants.NUM_ROWS; row++) {
+		const currentRow = []
+		for (let col = 0; col < Constants.NUM_COLS; col++) {
+			currentRow.push(uuidv4())
+		}
+		keyList.push(currentRow)
+	}
+	return keyList
+}
+
+
+

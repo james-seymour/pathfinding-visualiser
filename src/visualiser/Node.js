@@ -1,24 +1,32 @@
-import React, { useState } from 'react'
+import React, { useState, PureComponent } from 'react'
 import "./Node.css"
 
-const Node = (props) => {
-    // Setup unique identifying strings for Node html elements
-    const idString = `node-${props.row}-${props.col}`
-    const specialNode = props.isStart ? "node-start" : props.isFinish ? "node-finish" : props.isWall ? "node-wall" : ""
+export default class Node extends PureComponent {
+  render() {
+		// console.log("re-rendering")
+		const extraClassName = this.props.nodeData.isFinish
+		? 'node-finish'
+		: this.props.nodeData.isStart
+		? 'node-start'
+		: this.props.nodeData.isWall
+		? 'node-wall'
+		: '';
 
-    console.log("Re-rendered Node")
-    
-    return (
-        <div id={idString} className={`node ${specialNode}`}
-        onMouseDown={() => props.onMouseDown(props.row, props.col)}
-        onMouseEnter={() => props.onMouseEnter(props.row, props.col)}
-        onMouseUp={() => props.onMouseUp()}
-        >
-        </div>
-    )
+		return (
+			<div
+				id={`node-${this.props.nodeData.row}-${this.props.nodeData.col}`}
+				className={`node ${extraClassName}`}
+				onMouseDown={() => this.props.onMouseDown(this.props.nodeData.row, this.props.nodeData.col)}
+				onMouseEnter={() => this.props.onMouseEnter(this.props.nodeData.row, this.props.nodeData.col)}
+				onMouseUp={() => this.props.onMouseUp()}></div>
+		)
+	}
+
+
+
+
+
 }
-
-export default React.memo(Node)
 
 
 
