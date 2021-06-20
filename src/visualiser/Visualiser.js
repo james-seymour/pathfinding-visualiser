@@ -8,13 +8,15 @@ import "./Visualiser.css"
 
 // Any {} tells the compiler this is JS specific code 
 
+
+
+
 const Visualiser = (props) => {
     
 	const [gridData, updateGridData] = React.useState(createGridData())
-	// const fakeGridData = React.useRef(createGridData())
 	// A toggle variables for mouse pressed, which is used for clicking and dragging walls
-	const [mousePressed, updateMousePressed] = React.useState(false)
 	const isRunning = React.useRef(false)
+	const [mousePressed, updateMousePressed] = React.useState(false)
 
 	// Use effects are fucking sick if the the element in brackets updates its state 
 	// ([props.algorithmChoice]), then the function will be called.
@@ -37,6 +39,7 @@ const Visualiser = (props) => {
 	}
 
 	const placeWallInGrid = (row, col) => {
+		// console.log(`placing wall at ${row} ${col}` )
 		const newGrid = [...gridData]
 		const wallNode = newGrid[row][col]
 		const newNode = {
@@ -52,13 +55,13 @@ const Visualiser = (props) => {
 		const startNode = getStartNode(gridDataCopy)
 		const endNode = getEndNode(gridDataCopy)
 
-
 		switch(algorithm) {
 			// Add more cases on here for more implementations
 			// Visualiser algorithms do not need the current state of the gridData
 			// because they can actually receive this state by calling the update function
 			// See dijkstra.js
 			case Constants.DIJKSTRA:
+				updateGridData(placeWallInGrid(1,1))
 				//const algorithmCalculation = calculateDijkstra(gridDataCopy, startNode, endNode)
 				// console.log(algorithmCalculation)
 				// Animate here
@@ -70,61 +73,27 @@ const Visualiser = (props) => {
 	}	
 
 	const handleMouseDown = (row, col) => {
-		if (isRunning.current) return;
-		// Place wall in grid
+		
 		updateGridData(placeWallInGrid(row, col))
-		// console.log("MouseDown at", row, col)
-
-		// "Hold" mouse down by setting mousePressed state to true
 		updateMousePressed(true)
+		console.log(mousePressed)
 	}
 	
 	const handleMouseEnter = (row, col) => {
-		if (isRunning.current) return;
-		// console.log("MouseEnter at", row, col)
 		if (mousePressed) {
 			updateGridData(placeWallInGrid(row, col))
 		}
 	}
 	
 	const handleMouseUp = () => {
-		if (isRunning.current) return;
 		updateMousePressed(false)
-		// console.log("MouseUp")
+		console.log(mousePressed)
 	}
 
-	const renderGrid = () => {
-		return (
+	return React.useMemo(
+		() => (
 			// We want to render our <Node /> components here using the a Board Model
 			<div className="grid">
-				{gridData.map((rowData, rowIndex) => {
-					return (
-						<div key={rowIndex}>
-							{rowData.map((node, nodeIndex) => {
-								return (
-									<Node 
-									key={nodeIndex} 
-									row={rowIndex} 
-									col={nodeIndex} 
-									isStart={node.isStart} 
-									isFinish={node.isFinish} 
-									isWall={node.isWall}
-									onMouseDown={() => {handleMouseDown(node.row, node.col)}}
-									onMouseEnter={() => {handleMouseEnter(node.row, node.col)}}
-									onMouseUp={() => {handleMouseUp()}}
-									/>
-								)
-							})}
-						</div>
-					)
-				})}
-			</div>
-		)
-	}
-
-	const renderUserInterface = () => {
-		return (
-			<div className="userinterface">   
 				<button id="Dijkstra" className="algorithmButton"
 				onClick={() => parseAlgorithmChoice(Constants.DIJKSTRA)}>
 					Run Djikstra's Algorithm
@@ -153,18 +122,26 @@ const Visualiser = (props) => {
 				onClick={() => clearEntireCanvas()}>
 					Clear the Entire Board!
 				</button>
+				{gridData.map((rowData, rowIndex) => {
+					return (
+						<div key={rowIndex}>
+							{rowData.map((node, nodeIndex) => {
+								return (
+									<Node 
+									key={nodeIndex} 
+									nodeData={gridData[rowIndex][nodeIndex]}
+									onMouseDown={() => handleMouseDown(rowIndex, nodeIndex)}
+									onMouseEnter={() => handleMouseEnter(rowIndex, nodeIndex)}
+									onMouseUp={handleMouseUp}
+									/>
+								)
+							})}
+						</div>
+					)
+				})}
 			</div>
-		)
-	}
-
-	// Main Render State
-	return (
-		<>
-			{renderUserInterface()}
-			{renderGrid()}
-		</>
+		), [gridData]
 	)
-
 }
 
 const getStartNode = (grid) => {

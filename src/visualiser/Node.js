@@ -1,24 +1,40 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import "./Node.css"
 
 const Node = (props) => {
+    // console.log("re-rendering")
     // Setup unique identifying strings for Node html elements
-    const idString = `node-${props.row}-${props.col}`
-    const specialNode = props.isStart ? "node-start" : props.isFinish ? "node-finish" : props.isWall ? "node-wall" : ""
-
-    console.log("Re-rendered Node")
-    
     return (
-        <div id={idString} className={`node ${specialNode}`}
-        onMouseDown={() => props.onMouseDown(props.row, props.col)}
-        onMouseEnter={() => props.onMouseEnter(props.row, props.col)}
+        <div id={`node-${props.nodeData.row}-${props.nodeData.col}`} className={`node ${props.nodeData.isWall ? "node-wall" : ""}`}
+        onMouseDown={() => props.onMouseDown(props.nodeData.row, props.nodeData.col)}
+        onMouseEnter={() => props.onMouseEnter(props.nodeData.row, props.nodeData.col)}
         onMouseUp={() => props.onMouseUp()}
         >
         </div>
     )
 }
 
-export default React.memo(Node)
+const nodePropsAreEqual = (prevProps, newProps) => {
+    const prevKeys = Object.keys(prevProps.nodeData)
+    const newKeys = Object.keys(newProps.nodeData)
+
+    
+    // console.log("keys")
+    // if (prevKeys.length !== newKeys.length) {
+    //     return false;
+    // }
+
+    for (let key of prevKeys) {
+        if (prevProps.nodeData[key] !== newProps.nodeData[key]) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+
+export default Node
 
 
 
