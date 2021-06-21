@@ -1,7 +1,6 @@
 // Main Dijkstra algorithm file
 
-import * as Constants from "../constants"
-
+import { oneDimensionaliseGridNodes, sortNodesByDistance, updateUnvisitedNeighbours, getUnvisitedNeighbours } from "./algorithms"
 
 /* Probably rework this bit because I'm not sure how efficient it is to run the entire simulation first,
 and only then animate everything. If you wanna try it like this, then each node in the board data would
@@ -17,22 +16,26 @@ I think react should handle this because we set a key for each
 */
 
 
-const calculateDijkstra = (updateGridData) => {
-    updateGridData(gridData => {
-        // Copy a new version of the 2d grid data array, update this version and then return it to re-render 
-        const newGridData = [...gridData]
-        
-        // Run Dijkstra's algo here
-        
-        // const startNode = newGridData[Constants.EXAMPLE_START_NODE[0]][Constants.EXAMPLE_START_NODE[1]]
-        // const endNode = newGridData[Constants.EXAMPLE_END_NODE[0]][Constants.EXAMPLE_END_NODE[1]]
-        // console.log(startNode, endNode)
-        
-        newGridData[2][1].isWall = !newGridData[2][1].isWall 
-        console.log(newGridData[2][1])
+const calculateDijkstra = (grid, startNode, endNode) => {
+    const visitedNodesInOrder = []
+    startNode.distance = 0
+    const unvisitedNodes = oneDimensionaliseGridNodes(grid)
 
-        return gridData
-    })
+    while(!!unvisitedNodes.length) {
+        sortNodesByDistance(unvisitedNodes)
+        const closestNode = unvisitedNodes.shift()
+
+        if (closestNode.isWall) continue;
+        if (closestNode.distance === Infinity) return { algorithmCalculation: visitedNodesInOrder, endNodeReachable: false  };
+
+        closestNode.isVisited = true
+        visitedNodesInOrder.push(closestNode)
+
+        if (closestNode === endNode) return { algorithmCalculation: visitedNodesInOrder, endNodeReachable: true };
+
+        updateUnvisitedNeighbours(closestNode, grid)
+    }
+
 }
 
 
