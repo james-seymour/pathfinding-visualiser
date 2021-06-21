@@ -1,4 +1,98 @@
+html {
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+}
+
 .grid {
-    margin: auto;
+    box-sizing: border-box;
+    display: inline-block;
+    background-color: white;
     font-size: 0;
+    height: 100%;
+    width: var(--screen-x)*30px;
+}
+
+.userinterface {
+    display: inline-block;
+    background-color: rgb(151, 143, 213);
+    border-color: rgb(0, 0, 0);
+    text-align: center;
+    color: white;
+}
+
+.navbar {
+    display: inline-block;
+    color: white;
+    font-family: 'Verdana', Arial, sans-serif;
+    font-weight: bold;
+    font-size: large;
+    padding: 20px;
+    padding-left: 30px;
+    text-decoration: none;
+}
+
+.button {
+    background-color: rgb(151, 143, 213);
+    border: none;
+    padding: 10px 25px;
+    font-weight: bold;
+    text-align: center;
+    display: inline-block;
+    color: white;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: rgb(188, 200, 156);
+}
+
+
+.dropbtn {
+    font-weight: bold;
+    background-color: rgb(151, 143, 213);
+    color: white;
+    padding: 10px 25px;
+    border: none;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  /* Dropdown Content (Hidden by Default) */
+  .dropdown-content {
+    font-weight: bold;
+    text-align: center;
+    display: none;
+    position: absolute;
+    background-color: rgb(151, 143, 213);
+    min-width: 160px;
+    z-index: 2;
+  }
+  
+  /* Links inside the dropdown */
+  .dropdown-content a {
+    border-radius: 5%;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+
+  /* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #ddd;}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {display: block;}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {background-color: rgb(188, 200, 156);}
+
+.footer {
+    font-family: 'Verdana', Arial, sans-serif;
+    background-color: rgb(151, 143, 213);
+    color: white;
+    padding: 10px 25px;
+    border: none;
 }
