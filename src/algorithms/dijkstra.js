@@ -1,6 +1,5 @@
 // Main Dijkstra algorithm file
 
-import * as Constants from "../constants"
 import { oneDimensionaliseGridNodes, sortNodesByDistance, updateUnvisitedNeighbours, getUnvisitedNeighbours } from "./algorithms"
 
 /* Probably rework this bit because I'm not sure how efficient it is to run the entire simulation first,
@@ -27,12 +26,12 @@ const calculateDijkstra = (grid, startNode, endNode) => {
         const closestNode = unvisitedNodes.shift()
 
         if (closestNode.isWall) continue;
-        if (closestNode.distance === Infinity) return visitedNodesInOrder;
+        if (closestNode.distance === Infinity) return { algorithmCalculation: visitedNodesInOrder, endNodeReachable: false  };
 
         closestNode.isVisited = true
         visitedNodesInOrder.push(closestNode)
 
-        if (closestNode === endNode) return visitedNodesInOrder;
+        if (closestNode === endNode) return { algorithmCalculation: visitedNodesInOrder, endNodeReachable: true };
 
         updateUnvisitedNeighbours(closestNode, grid)
     }
