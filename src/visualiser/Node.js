@@ -10,7 +10,9 @@ export default class Node extends PureComponent {
 				className={`node ${this.props.nodeData.isFinish ? 'node-finish' : this.props.nodeData.isStart ? 'node-start' : ''}`}
 				onMouseDown={() => this.props.onMouseDown(this.props.nodeData.row, this.props.nodeData.col)}
 				onMouseEnter={() => this.props.onMouseEnter(this.props.nodeData.row, this.props.nodeData.col)}
-				onMouseUp={() => this.props.onMouseUp()}></div>
+				onMouseUp={() => this.props.onMouseUp()}
+				
+				></div>
 		)
 	}
 }
