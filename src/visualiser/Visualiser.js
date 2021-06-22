@@ -37,8 +37,9 @@ export default class Visualiser extends Component {
       currentRow: 0,
       currentCol: 0,
 			selectedAlgorithm: null,
-			animationSpeed: 10,
-			animationSpeedLabel: "Medium"
+			animationSpeed: 5,
+			animationSpeedLabel: "Fast",
+			nodesVisible: false
     };
 	}
 
@@ -163,35 +164,35 @@ export default class Visualiser extends Component {
 	}
 
 	parseAlgorithmChoice() {
-		if (this.state.isRunning) return;
-		// Set the state to running!
-		this.setState({isRunning: true})
-		this.resetElementInGrid('node-wall')
+	if (this.state.isRunning) return;
+	// Set the state to running!
+	this.setState({isRunning: true})
+	this.resetElementInGrid('node-wall')
 
-		// Grab some variables that each algorithm needs
-		const syncedGrid = this.syncHTMLwithGridData()
-		const startNode = this.getStartNode(syncedGrid)
-		const endNode = this.getEndNode(syncedGrid)
+	// Grab some variables that each algorithm needs
+	const syncedGrid = this.syncHTMLwithGridData()
+	const startNode = this.getStartNode(syncedGrid)
+	const endNode = this.getEndNode(syncedGrid)
 
-		switch(this.state.selectedAlgorithm) {
-			// Add more cases on here for more implementations
-			// Visualiser algorithms do not need the current state of the gridData
-			// because they can actually receive this state by calling the update function
-			// See dijkstra.js
-			case "Dijkstra's Algorithm":
-				const dijkstraCalculation = calculateDijkstra(syncedGrid, startNode, endNode)
-				const dijkstraShortestPath = getNodesInShortestPathOrder(endNode)
-				this.animateAlgorithm(dijkstraCalculation, dijkstraShortestPath)
-				// if (endNodeReachable) {this.animateShortestPath(dijkstraCalculation)}
-				break;
-			case "A* Search":
-				const dfsCalculation = dfs(syncedGrid, startNode, endNode)
-				const dfsShortestPath = getNodesInShortestPathOrder(endNode)
-				this.animateAlgorithm(dfsCalculation, dfsShortestPath)
-				break;
-			default:
-
-				break;
+	switch(this.state.selectedAlgorithm) {
+		// Add more cases on here for more implementations
+		// Visualiser algorithms do not need the current state of the gridData
+		// because they can actually receive this state by calling the update function
+		// See dijkstra.js
+		case "Dijkstra's Algorithm":
+			const dijkstraCalculation = calculateDijkstra(syncedGrid, startNode, endNode)
+			const dijkstraShortestPath = getNodesInShortestPathOrder(endNode)
+			this.animateAlgorithm(dijkstraCalculation, dijkstraShortestPath)
+			// if (endNodeReachable) {this.animateShortestPath(dijkstraCalculation)}
+			break;
+		case "A* Search":
+			const dfsCalculation = dfs(syncedGrid, startNode, endNode)
+			const dfsShortestPath = getNodesInShortestPathOrder(endNode)
+			this.animateAlgorithm(dfsCalculation, dfsShortestPath)
+			break;
+		default:
+			this.setState({isRunning: false})
+			break;
 		}
 	}
 
@@ -205,7 +206,11 @@ export default class Visualiser extends Component {
       } else {
 				setTimeout(() => {
 					const node = visitedNodesInOrder[i];
-					this.updateNodeClassName(node.row, node.col, 'node node-visited')
+					if (this.state.nodesVisible) {
+						this.updateNodeClassName(node.row, node.col, 'node node-visited-visible')
+					} else {
+						this.updateNodeClassName(node.row, node.col, 'node node-visited')
+					}
 				}, this.state.animationSpeed * i);
 			}
     }
@@ -222,7 +227,7 @@ export default class Visualiser extends Component {
         const node = nodesInShortestPathOrder[i];
         document.getElementById(`node-${node.row}-${node.col}`).className =
           'node node-shortest-path';
-      }, 50 * i);
+      }, this.state.animationSpeed * 6 * i);
     }
   }
 
@@ -273,6 +278,10 @@ export default class Visualiser extends Component {
 		this.resetElementInGrid('')
 	}
 
+	toggleVisitedNodesVisibility = () => {
+		this.setState({ nodesVisible: !this.state.nodesVisible })
+	}
+
 	renderUserInterface() {
 		return (
 			<div className="userinterface">
@@ -280,54 +289,54 @@ export default class Visualiser extends Component {
 					Pathfinding Visualiser
 				</a>
 				<div className="dropdown">
-					<button className="dropbtn">Run an Algorithm!</button>
+					<button className="button dropbtn">Run an Algorithm!</button>
 					<div className="dropdown-content">
-						<button id="Dijkstra" className="button algorithm-button"
+						<button id="Dijkstra" className="dropdown-content-button algorithm-button"
 						onClick={() => this.setState({ selectedAlgorithm: "Dijkstra's Algorithm"})}>
 							Djikstra's Algorithm
 						</button>
-						<button id="AStar" className="button algorithm-button"
+						<button id="AStar" className="dropdown-content-button algorithm-button"
 						onClick={() => this.setState({ selectedAlgorithm: "A* Search"})}>
 							A* Search
 						</button>
-						<button id="Greedy" className="button algorithm-button"
+						<button id="Greedy" className="dropdown-content-button algorithm-button"
 						onClick={() => this.setState({ selectedAlgorithm: "Greedy Best-First Search"})}>
 							Run Greedy Best-First Search
 						</button>
-						<button id="Swarm" className="button algorithm-button"
+						<button id="Swarm" className="dropdown-content-button algorithm-button"
 						onClick={() => this.setState({ selectedAlgorithm: "Swarm Search"})}>
 							Run Swarm Algorithm
 						</button>
 					</div>
 				</div>
 				<div className="dropdown">
-					<button className="dropbtn">Generate A Maze!</button>
+					<button className="button dropbtn">Generate A Maze!</button>
 					<div className="dropdown-content">
-						<button className="button" onClick={() => {this.generateRandomMaze(0.1)}}>
+						<button className="dropdown-content-button" onClick={() => {this.generateRandomMaze(0.1)}}>
 							Sparse Random: (~10% Coverage)
 						</button>
-						<button className="button" onClick={() => {this.generateRandomMaze(0.2)}}>
+						<button className="dropdown-content-button" onClick={() => {this.generateRandomMaze(0.2)}}>
 							Normal Random: (~20% Coverage)
 						</button>
-						<button className="button" onClick={() => {this.generateRandomMaze(0.35)}}>
+						<button className="dropdown-content-button" onClick={() => {this.generateRandomMaze(0.35)}}>
 							Dense Random: (~35% Coverage)
 						</button>
 						{/* Create more maze buttons here */}
 					</div>
 				</div>
 				<div className="dropdown">
-					<button className="dropbtn">Speed: {this.state.animationSpeedLabel}</button>
+					<button className="button dropbtn">Speed: {this.state.animationSpeedLabel}</button>
 					<div className="dropdown-content">
-						<button className="button" onClick={() => {this.updateAnimationSpeed("Slow", 25)}}>
+						<button className="dropdown-content-button" onClick={() => {this.updateAnimationSpeed("Slow", 20)}}>
 							Slow
 						</button>
-						<button className="button" onClick={() => {this.updateAnimationSpeed("Medium", 15)}}>
+						<button className="dropdown-content-button" onClick={() => {this.updateAnimationSpeed("Medium", 10)}}>
 							Medium
 						</button>
-						<button className="button" onClick={() => {this.updateAnimationSpeed("Fast", 5)}}>
+						<button className="dropdown-content-button" onClick={() => {this.updateAnimationSpeed("Fast", 5)}}>
 							Fast
 						</button>
-						<button className="button" onClick={() => {this.updateAnimationSpeed("Insane", 1)}}>
+						<button className="dropdown-content-button" onClick={() => {this.updateAnimationSpeed("Insane", 1)}}>
 							Insane
 						</button>
 					</div>
@@ -340,6 +349,13 @@ export default class Visualiser extends Component {
 				onClick={() => this.clearEntireCanvas()}>
 					Clear the Entire Board!
 				</button>
+				<div className="view-visited-container" onMouseDown={() => this.toggleVisitedNodesVisibility()}>
+					<label className="view-visited">
+						<input id="toggle-view-visited" type="checkbox"></input>
+						<span className="checkmark"></span>
+						View Visited Nodes?
+					</label>
+				</div>
 			</div>
 
 		)
@@ -394,7 +410,7 @@ export default class Visualiser extends Component {
 			{this.renderLegend()}
 			{this.renderGrid()}
 			<div className="footer">
-				Created by James Seymour. The source code for this app and my other projects are on my Github <a href="https://github.com/james-seymour">here</a>
+				Created by James Seymour. The source code for this app and my other projects are on my Github <a className="github-link" href="https://github.com/james-seymour">here</a>
 			</div>
 			</>
 		)

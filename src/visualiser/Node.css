@@ -1,7 +1,7 @@
 .node {
     width: 25px;
     height: 25px;
-    outline: 1px solid rgb(198, 193, 240);
+    outline: 1px solid rgb(72, 72, 72);
     display: inline-block;
   }
 
@@ -10,6 +10,7 @@
     background-position: center;
     background-repeat: no-repeat;
     background-size: 70%;
+    background-color: rgb(207, 102, 121);
 
     animation-name: fadeInAnimation;
     animation-duration: 0.1s;
@@ -19,6 +20,10 @@
     animation-iteration-count: 1;
     animation-fill-mode: forwards;
     animation-play-state: running;
+}
+
+.node-start:hover {
+    background-size: 100%;
 }
 
 .node-finish {
@@ -26,6 +31,7 @@
     background-position: center;
     background-repeat: no-repeat;
     background-size: 70%;
+    background-color: rgb(207, 102, 121);
 
     animation-name: fadeInAnimation;
     animation-duration: 0.1s;
@@ -37,10 +43,14 @@
     animation-play-state: running;
 }
 
+.node-finish:hover {
+    background-size: 100%
+}
+
 .node-wall {
-    outline: none;
+
     background-size: 95%;   
-    background-color: rgb(114, 57, 151);
+    background-color: rgb(150, 150, 150);
     animation-name: fadeInAnimation;
     animation-duration: 0.1s;
     animation-timing-function: ease-out;
@@ -68,9 +78,8 @@
     }
 }
 
-
 .node-visited {
-    animation-name: visitedAnimation;
+    animation-name: defaultVisitedAnimation;
     animation-duration: 1.5s;
     animation-timing-function: ease-out;
     animation-delay: 0;
@@ -80,10 +89,21 @@
     animation-play-state: running;
 }
 
-@keyframes visitedAnimation {
+.node-visited-visible {
+    animation-name: visibleVisitedAnimation;
+    animation-duration: 1.5s;
+    animation-timing-function: ease-out;
+    animation-delay: 0;
+    animation-direction: alternate;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+    animation-play-state: running;
+}
+
+@keyframes defaultVisitedAnimation {
     0% {
     transform: scale(0.3);
-    background-color: rgb(151, 143, 213);
+    background-color: rgb(213, 151, 143);
     border-radius: 100%;
     }
 
@@ -101,12 +121,38 @@
     100% {
     border-radius: 0%;
     transform: scale(1);
-    background-color: rgb(213, 151, 143);
+    background-color: none;
     }    
 }
 
+@keyframes visibleVisitedAnimation {
+    0% {
+        transform: scale(0.3);
+        background-color: rgb(213, 151, 143);
+        border-radius: 100%;
+        }
+    
+        50% {
+        background-color: rgb(143, 205, 213);
+        border-radius: 50%;
+        }
+    
+        75% {
+        transform: scale(1.2);
+        background-color: rgb(159, 213, 143);
+        border-radius: 25%;
+        }
+    
+        100% {
+        border-radius: 0%;
+        transform: scale(1);
+        background-color: rgba(151, 143, 213, 0.6);
+        }
+}
+
 .node-shortest-path {
-    background-color: rgb(143, 213, 151);   
+    outline: none;
+    background-color: rgb(207, 102, 121);   
     animation-name: fadeInAnimation;
     animation-duration: 0.1s;
     animation-timing-function: ease-out;
