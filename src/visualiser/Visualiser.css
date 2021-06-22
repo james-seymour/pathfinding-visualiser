@@ -4,17 +4,9 @@ html {
     display: inline-block;
 }
 
-.grid {
-    box-sizing: border-box;
-    display: inline-block;
-    background-color: white;
-    font-size: 0;
-    height: 100%;
-    width: var(--screen-x)*30px;
-}
-
 .userinterface {
     display: inline-block;
+    justify-content: left;
     background-color: rgb(151, 143, 213);
     border-color: rgb(0, 0, 0);
     text-align: center;
@@ -23,6 +15,7 @@ html {
 
 .navbar {
     display: inline-block;
+
     color: white;
     font-family: 'Verdana', Arial, sans-serif;
     font-weight: bold;
@@ -49,6 +42,7 @@ html {
 
 
 .dropbtn {
+    text-align: center;
     font-weight: bold;
     background-color: rgb(151, 143, 213);
     color: white;
@@ -81,13 +75,48 @@ html {
   }
 
   /* Change color of dropdown links on hover */
-.dropdown-content a:hover {background-color: #ddd;}
+.dropdown-content a:hover {
+    background-color: #ddd;
+}
 
 /* Show the dropdown menu on hover */
-.dropdown:hover .dropdown-content {display: block;}
+.dropdown:hover .dropdown-content {
+    display: block;
+
+}
 
 /* Change the background color of the dropdown button when the dropdown content is shown */
-.dropdown:hover .dropbtn {background-color: rgb(188, 200, 156);}
+.dropdown:hover .dropbtn {
+    background-color: rgb(188, 200, 156);
+}
+
+.legend {
+    width: 100%;
+    height: 5vh;
+    text-align: center;
+    padding-top: 10px;
+}
+
+.visualise-button {
+    background-color: rgb(213, 151, 143);
+    border: 2px solid black;
+    border-radius: 10px;
+    padding: 10px 25px;
+    font-weight: bold;
+    text-align: center;
+    display: inline-block;
+    color: white;
+    cursor: pointer;
+}
+
+.grid {
+    box-sizing: border-box;
+    display: inline-block;
+    background-color: white;
+    font-size: 0;
+    height: 100%;
+    width: var(--screen-x)*30px;
+}
 
 .footer {
     font-family: 'Verdana', Arial, sans-serif;
