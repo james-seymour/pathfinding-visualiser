@@ -1,6 +1,6 @@
 // Main Dijkstra algorithm file
 
-import { oneDimensionaliseGridNodes, sortNodesByDistance, updateUnvisitedNeighbours, getUnvisitedNeighbours } from "./algorithms"
+import { oneDimensionaliseGridNodes, sortNodesByDistance, updateUnvisitedNeighbours, getUnvisitedNeighbours, getNodesInShortestPathOrder } from "./algorithms.js"
 
 /* Probably rework this bit because I'm not sure how efficient it is to run the entire simulation first,
 and only then animate everything. If you wanna try it like this, then each node in the board data would
@@ -26,12 +26,12 @@ const calculateDijkstra = (grid, startNode, endNode) => {
         const closestNode = unvisitedNodes.shift()
 
         if (closestNode.isWall) continue;
-        if (closestNode.distance === Infinity) return { algorithmCalculation: visitedNodesInOrder, endNodeReachable: false  };
+        if (closestNode.distance === Infinity) return visitedNodesInOrder;
 
         closestNode.isVisited = true
         visitedNodesInOrder.push(closestNode)
 
-        if (closestNode === endNode) return { algorithmCalculation: visitedNodesInOrder, endNodeReachable: true };
+        if (closestNode === endNode) return visitedNodesInOrder;
 
         updateUnvisitedNeighbours(closestNode, grid)
     }

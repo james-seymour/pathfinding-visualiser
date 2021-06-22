@@ -32,4 +32,14 @@ const getUnvisitedNeighbours = (node, grid) => {
   return neighbours.filter(neighbour => !neighbour.isVisited)
 }
 
-export { oneDimensionaliseGridNodes, sortNodesByDistance, updateUnvisitedNeighbours, getUnvisitedNeighbours }
+const getNodesInShortestPathOrder = (finishNode) => {
+  const nodesInShortestPathOrder = []
+  let currentNode = finishNode
+  while (currentNode !== null) {
+    nodesInShortestPathOrder.unshift(currentNode)
+    currentNode = currentNode.previousNode
+  }
+  return nodesInShortestPathOrder
+}
+
+export { oneDimensionaliseGridNodes, sortNodesByDistance, updateUnvisitedNeighbours, getUnvisitedNeighbours, getNodesInShortestPathOrder }
