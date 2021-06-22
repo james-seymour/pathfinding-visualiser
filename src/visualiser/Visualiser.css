@@ -5,7 +5,6 @@ html {
 }
 
 .userinterface {
-    outline: 3px solid rgb(100, 100, 100);
     display: inline-block;
     justify-content: center;
     background-color: rgb(42, 42, 42);
@@ -177,10 +176,10 @@ border-radius: 10px;
     transform: rotate(45deg);
 }
 
-.legend {
+.start {
     width: 100%;
     text-align: center;
-    padding-top: 20px;
+    padding-top: 10px;
     padding-bottom: 20px;
 }
 
@@ -190,6 +189,7 @@ border-radius: 10px;
     border-radius: 10px;
     padding: 10px 25px;
     font-weight: bold;
+    font-size: large;
     text-align: center;
     display: inline-block;
     color: white;
@@ -205,12 +205,85 @@ border-radius: 10px;
     width: var(--screen-x)*30px;
 }
 
+.legend-container {
+    padding-top: 20px;
+}
+
+.legend {
+    display: inline-block;
+    padding: 10px;
+}
+
+.legend-text {
+    padding-left: 30px;
+    padding-right: 30px;
+    display: inline-block;
+    color: white;
+    font-weight: bold;
+    font-family: sans-serif;
+    font-size: large;
+    text-align: center;
+}
+
+.node-text {
+    display: flex;
+    justify-content: space-between;
+}
+
+.node-start-example {
+    width: 25px;
+    height: 25px;
+    outline: 1px solid black;
+    background-image: url("./resources/home.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 70%;
+    background-color: rgb(151, 143, 213);
+}
+
+.node-finish-example {
+    width: 25px;
+    height: 25px;
+    outline: 1px solid black;
+    background-image: url("./resources/flag.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 70%;
+    background-color: rgb(151, 143, 213);
+}
+
+.node-wall-example {
+    width: 25px;
+    height: 25px;
+    outline: 1px solid black;
+    background-size: 95%;   
+    background-color: rgb(150, 150, 150);
+}
+
+.node-visited-example {
+    width: 25px;
+    height: 25px;
+    outline: 1px solid black;
+    background-size: 95%;   
+    background-color: rgba(151, 143, 213, 0.6);
+}
+
+.node-shortest-example {
+    width: 25px;
+    height: 25px;
+    outline: 1px solid black;
+    background-size: 95%;   
+    background-color: rgb(207, 102, 121);
+}
+
 .footer {
     font-family: 'Verdana', Arial, sans-serif;
     background-color: rgb(42, 42, 42);
     color: white;
-    padding: 10px 25px;
+    padding: 15px 25px;
     border: none;
+    text-align: left;
+    font-size: small;
 }
 
 .github-link {

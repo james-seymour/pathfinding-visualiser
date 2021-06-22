@@ -10,7 +10,7 @@
     background-position: center;
     background-repeat: no-repeat;
     background-size: 70%;
-    background-color: rgb(207, 102, 121);
+    background-color: rgb(151, 143, 213);
 
     animation-name: fadeInAnimation;
     animation-duration: 0.1s;
@@ -31,7 +31,7 @@
     background-position: center;
     background-repeat: no-repeat;
     background-size: 70%;
-    background-color: rgb(207, 102, 121);
+    background-color: rgb(151, 143, 213);
 
     animation-name: fadeInAnimation;
     animation-duration: 0.1s;
@@ -151,7 +151,7 @@
 }
 
 .node-shortest-path {
-    outline: none;
+
     background-color: rgb(207, 102, 121);   
     animation-name: fadeInAnimation;
     animation-duration: 0.1s;

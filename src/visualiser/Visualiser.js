@@ -12,8 +12,8 @@ export default class Visualiser extends Component {
 	constructor() {
 		super();
 
-		const variableNumRows = Math.floor(((window.screen.height - 350) / 25))
-		const variableNumCols = Math.floor(((window.screen.width - 200) / 25))
+		const variableNumRows = Math.floor(((window.screen.height - 370) / 25))
+		const variableNumCols = Math.floor(((window.screen.width - 180) / 25))
 		const variableDefaultStartingPos = [Math.floor(variableNumRows/4) - 1, Math.floor(variableNumCols/4) - 1]
 		const variableDefaultEndingPos = [Math.floor(3*variableNumRows/4), Math.floor(3*variableNumCols/4)]
 
@@ -361,9 +361,9 @@ export default class Visualiser extends Component {
 		)
 	}
 
-	renderLegend() {
+	renderStartButton() {
 		return (
-			<div className="legend">
+			<div className="start">
 				<button className="visualise-button" onClick={() => {this.parseAlgorithmChoice()}}>
 					{this.state.selectedAlgorithm ? 
 					`Run ${this.state.selectedAlgorithm}!` : 
@@ -400,15 +400,52 @@ export default class Visualiser extends Component {
 		)
 	}
 
-
-
+	renderLegend() {
+		return (
+			<div className="legend-container">
+				<div className="legend">
+					<div className="legend-text">
+						<label className="node-text">
+							Start Node:
+							<div className="node-start-example"></div>
+						</label>
+					</div>
+					<div className="legend-text">
+						<label className="node-text">
+							End Node:
+							<div className="node-finish-example"></div>
+						</label>
+					</div>
+					<div className="legend-text">
+						<label className="node-text">
+							Shortest Path:
+							<div className="node-shortest-example"></div>
+						</label>
+					</div>
+					<div className="legend-text">
+						<label className="node-text">
+							Wall Node:
+							<div className="node-wall-example"></div>
+						</label>
+					</div>
+					<div className="legend-text">
+						<label className="node-text">
+							Visited Node:
+							<div className="node-visited-example"></div>
+						</label>
+					</div>
+				</div>
+			</div>
+		)
+	}
 	// Main Render State
 	render() {
 		return (		
 			<>
 			{this.renderUserInterface()}
-			{this.renderLegend()}
+			{this.renderStartButton()}
 			{this.renderGrid()}
+			{this.renderLegend()}
 			<div className="footer">
 				Created by James Seymour. The source code for this app and my other projects are on my Github <a className="github-link" href="https://github.com/james-seymour">here</a>
 			</div>
